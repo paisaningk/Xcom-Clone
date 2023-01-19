@@ -56,10 +56,10 @@ namespace UnitAction
         public override void TakeAction(GridPosition gridPosition, System.Action onMoveComplete)
         {
             targetPosition = LevelGrid.Instance.GetWordPosition(gridPosition);
+
+            OnStartMovingInvoke();
             
             ActionStart(onMoveComplete);
-            
-            OnStartMovingInvoke();
         }
 
         public override List<GridPosition> GetValidActionGridPositionsList()

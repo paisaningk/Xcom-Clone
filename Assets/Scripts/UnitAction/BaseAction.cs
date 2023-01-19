@@ -10,7 +10,10 @@ namespace UnitAction
     {
         protected Unit unit;
         protected bool isActive;
-        protected System.Action onActionComplete;
+        protected Action onActionComplete;
+
+        public static event EventHandler OnAnyActionStart;
+        public static event EventHandler OnAnyActionCompleted;
 
         protected virtual void OnValidate()
         {
@@ -38,13 +41,30 @@ namespace UnitAction
         {
             isActive = true;
             this.onActionComplete = onActionComplete;
+            
+            OnAnyActionStartInvoke();
         }
         
         protected void ActionComplete()
         {
             isActive = false;
             onActionComplete();
+            OnAnyActionCompletedInvoke();
         }
 
+        private void OnAnyActionStartInvoke()
+        {
+            OnAnyActionStart?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnAnyActionCompletedInvoke()
+        {
+            OnAnyActionCompleted?.Invoke(this, EventArgs.Empty);
+        }
+
+        public Unit GetUnit()
+        {
+            return unit;
+        }
     }
 }

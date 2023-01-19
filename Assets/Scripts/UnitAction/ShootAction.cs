@@ -21,7 +21,7 @@ namespace UnitAction
         private Unit targetUnit;
         private bool canShootBullet;
 
-        public event EventHandler<OnShootEventArgs> OnShoot;
+        public  event EventHandler<OnShootEventArgs> OnShoot;
 
         public void Update()
         {
@@ -55,8 +55,7 @@ namespace UnitAction
 
         public override void TakeAction(GridPosition gridPosition, System.Action onActionComplete)
         {
-            ActionStart(onActionComplete);
-            
+
             state = State.Aiming;
             
             stateTimer = aimingStateTimer;
@@ -64,6 +63,8 @@ namespace UnitAction
             targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
 
             canShootBullet = true;
+            
+            ActionStart(onActionComplete);
         }
 
         private void Shoot()
@@ -111,6 +112,7 @@ namespace UnitAction
                     }
 
                     // เดี่ยวมาทำต่อเอง
+                    // อันนี้คือคือแบบ เดินของม้าแบบ fm
                     // int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
                     //
                     // if (testDistance > maxMoveDistance)
@@ -150,6 +152,11 @@ namespace UnitAction
         protected virtual void OnStartShootInvoke()
         {
             OnShoot?.Invoke(this, new OnShootEventArgs(targetUnit, unit));
+        }
+
+        public Unit GetTargetUnit()
+        {
+            return targetUnit;
         }
     }
 
