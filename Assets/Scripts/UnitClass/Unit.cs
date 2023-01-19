@@ -49,11 +49,13 @@ namespace UnitClass
 
         public void Update()
         {
+            
             var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
             if (newGridPosition != gridPosition)
             {
-                LevelGrid.Instance.MoveUnitToGridPosition(this, gridPosition, newGridPosition);
+                var oldGridPosition = gridPosition;
                 gridPosition = newGridPosition;
+                LevelGrid.Instance.MoveUnitToGridPosition(this,  oldGridPosition, newGridPosition);
             }
         }
 

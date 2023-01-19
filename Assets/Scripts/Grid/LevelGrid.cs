@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnitClass;
 using UnityEngine;
 using Utils;
@@ -8,7 +9,9 @@ namespace Grid
     public class LevelGrid : Singleton<LevelGrid>
     {
         [SerializeField] private Transform debugObjectPrefab;
+        
         private GridSystem gridSystem;
+        public event EventHandler OnAnyUnitMoveGridPosition;
 
         private void Awake()
         {
@@ -50,6 +53,8 @@ namespace Grid
             
             AddUnitAtGridPosition(toGridPosition,unit);
             GetGridDebugObject(toGridPosition).SetDebugText();
+            
+            OnAnyUnitMoveGridPosition?.Invoke(this, EventArgs.Empty);
         }
         
         public int GetWidth()

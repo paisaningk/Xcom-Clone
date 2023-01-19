@@ -9,7 +9,7 @@ namespace UnitAction
     public class ShootAction : BaseAction
     {
         [Header("Variable")]
-        [SerializeField] private int maxMoveDistance = 7;
+        [SerializeField] private int maxShootDistance = 7;
         [SerializeField] private float rotateSpeed = 10f;
         [SerializeField] private State state;
         [SerializeField] private float stateTimer;
@@ -99,9 +99,9 @@ namespace UnitAction
             var validActionGridPositionsList = new List<GridPosition>();
             var unitOnGridPosition = unit.GetGridPosition();
 
-            for (var x = -maxMoveDistance; x <= maxMoveDistance; x++)
+            for (var x = -maxShootDistance; x <= maxShootDistance; x++)
             {
-                for (var z = -maxMoveDistance; z <= maxMoveDistance; z++)
+                for (var z = -maxShootDistance; z <= maxShootDistance; z++)
                 {
                     var offSetGridPosition = new GridPosition(x, z);
                     var testGridPosition = offSetGridPosition + unitOnGridPosition;
@@ -157,6 +157,11 @@ namespace UnitAction
         public Unit GetTargetUnit()
         {
             return targetUnit;
+        }
+
+        public int GetMaxShootDistance()
+        {
+            return maxShootDistance;
         }
     }
 
