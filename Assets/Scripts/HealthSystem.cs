@@ -35,7 +35,7 @@ public class HealthSystem : MonoBehaviour
       }
 
       #if UNITY_EDITOR
-            Debug.Log(health);
+            // Debug.Log(health);
       #endif
    }
 

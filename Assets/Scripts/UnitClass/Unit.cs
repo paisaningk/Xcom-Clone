@@ -21,7 +21,8 @@ namespace UnitClass
         private GridPosition gridPosition;
 
         public static event EventHandler OnAnyActionPointsChanged;
-        public UnityEvent e;
+        public static event EventHandler OnAnyUnitSpawned;
+        public static event EventHandler OnAnyUnitDead;
 
         public void OnValidate()
         {
@@ -44,7 +45,9 @@ namespace UnitClass
             }
 
             TurnSystem.Instance.OnTurnChanged += OnTurnChanged;
-            healthSystem.OnDead += HealthSystemOnDead;
+            healthSystem.OnDead += HealthSystem_OnDead;
+            
+            OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty);
         }
 
         public void Update()
@@ -146,15 +149,17 @@ namespace UnitClass
             return gameObject.name;
         }
 
-        private void HealthSystemOnDead(object sender, EventArgs e)
+        private void HealthSystem_OnDead(object sender, EventArgs e)
         {
             LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this);
             LevelGrid.Instance.GetGridDebugObject(gridPosition).SetDebugText();
             
             Destroy(gameObject);
+            
+            OnAnyUnitDead.Invoke(this, EventArgs.Empty);
         }
 
-        private static void OnAnyActionPointsChangedInvoke()
+        private void OnAnyActionPointsChangedInvoke()
         {
             OnAnyActionPointsChanged?.Invoke(null, EventArgs.Empty);
         }
