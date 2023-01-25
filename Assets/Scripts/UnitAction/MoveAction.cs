@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enemy;
 using Grid;
 using UnityEngine;
 using UnityEngine.Video;
@@ -95,7 +96,19 @@ namespace UnitAction
             
             return validActionGridPositionsList;
         }
-        
+
+        public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+        {
+            var targetCountAtGridPosition = unit.GetShootAction().GetTargetCountAtPosition(gridPosition);
+            
+            return new EnemyAIAction
+            {
+                gridPosition = gridPosition,
+                actionValue = targetCountAtGridPosition * 10,
+            };
+            
+        }
+
 
         public override string GetActionName()
         {

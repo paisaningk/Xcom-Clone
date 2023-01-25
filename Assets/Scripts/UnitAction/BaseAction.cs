@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Enemy;
 using Grid;
 using UnitClass;
 using UnityEngine;
@@ -66,5 +67,32 @@ namespace UnitAction
         {
             return unit;
         }
+
+        public EnemyAIAction GetBestEnemyAIAction()
+        {
+            var enemyAIActionList = new List<EnemyAIAction>();
+
+            var validActionGridPosition = GetValidActionGridPositionsList();
+
+            foreach (var gridPosition in validActionGridPosition)
+            {
+                var enemyAIAction = GetEnemyAIAction(gridPosition);
+                
+                enemyAIActionList.Add(enemyAIAction);
+            }
+
+            if (enemyAIActionList.Count > 0)
+            {
+                enemyAIActionList.Sort((((a, b) => b.actionValue - a.actionValue)));
+                
+                return enemyAIActionList[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+        
+        public abstract EnemyAIAction GetEnemyAIAction(GridPosition gridPosition);
     }
 }

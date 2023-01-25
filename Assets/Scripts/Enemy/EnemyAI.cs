@@ -1,6 +1,7 @@
 ﻿using System;
 using Grid;
 using Turn;
+using UnitAction;
 using UnitClass;
 using UnityEngine;
 using Utils;
@@ -72,18 +73,40 @@ namespace Enemy
         
         private bool TryTakeEnemyAIAction(Unit enemyUnit,Action onEnemyAIAction)
         {
-            var spinActon = enemyUnit.GetSpinAction();
+            EnemyAIAction bestEnemyAIAction = null;
+            BaseAction bestBaseAction = null;
             
-            var actionGridPosition = enemyUnit.GetGridPosition();
-            
-            if (spinActon == null) return false;
+            foreach (var baseAction in enemyUnit.GetBaseActionArray())
+            {
+                if (!enemyUnit.CanSpendActionPointToTakeAction(baseAction))
+                {
+                    continue;
+                }
+
+                if (bestEnemyAIAction == null)
+                {
+                    bestEnemyAIAction = baseAction.GetBestEnemyAIAction();
+                    bestBaseAction = baseAction;
+                }
+                else
+                {
+                    var testEnemyAiAction = baseAction.GetBestEnemyAIAction();
+                    if (testEnemyAiAction != null && testEnemyAiAction.actionValue > bestEnemyAIAction.actionValue)
+                    {
+                        bestEnemyAIAction = baseAction.GetBestEnemyAIAction();
+                        bestBaseAction = baseAction;
+                    }
+                }
                 
-            if (!spinActon.IsValidActionGridPositions(actionGridPosition)) return false;
-                
-            if (!enemyUnit.TrySpendActionPointToTakeAction(spinActon)) return false;
-            
-            spinActon.TakeAction(actionGridPosition, onEnemyAIAction);
-            return true;
+            }
+
+            if (bestEnemyAIAction != null && enemyUnit.TrySpendActionPointToTakeAction(bestBaseAction))
+            {
+                bestBaseAction.TakeAction(bestEnemyAIAction.gridPosition, onEnemyAIAction);
+                return true;
+            }
+
+            return false;
         }
 
         private void SetStateTakingTurn()

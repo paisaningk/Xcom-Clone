@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enemy;
 using Grid;
 using UnityEngine;
 
@@ -43,6 +44,15 @@ namespace UnitAction
         public override int GetActionPointsCost()
         {
             return 2;
+        }
+
+        public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+        {
+            return new EnemyAIAction
+            {
+                gridPosition = gridPosition,
+                actionValue = 0,
+            };
         }
 
         public override string GetActionName()

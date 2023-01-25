@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Enemy;
 using Grid;
 using UnitClass;
 using UnityEngine;
@@ -93,11 +94,15 @@ namespace UnitAction
             }
         }
 
-
         public override List<GridPosition> GetValidActionGridPositionsList()
         {
-            var validActionGridPositionsList = new List<GridPosition>();
             var unitOnGridPosition = unit.GetGridPosition();
+            return GetValidActionGridPositionsList(unitOnGridPosition);
+        }
+
+        private List<GridPosition> GetValidActionGridPositionsList(GridPosition unitOnGridPosition)
+        {
+            var validActionGridPositionsList = new List<GridPosition>();
 
             for (var x = -maxShootDistance; x <= maxShootDistance; x++)
             {
@@ -142,6 +147,20 @@ namespace UnitAction
             }
             
             return validActionGridPositionsList;
+        }
+
+        public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+        {
+            return new EnemyAIAction
+            {
+                gridPosition = gridPosition,
+                actionValue = 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalized() * 100f)),
+            };
+        }
+
+        public int GetTargetCountAtPosition(GridPosition gridPosition)
+        {
+            return GetValidActionGridPositionsList(gridPosition).Count;
         }
 
         public override string GetActionName()

@@ -15,6 +15,7 @@ namespace UnitClass
         [SerializeField] private HealthSystem healthSystem;
         [SerializeField] private MoveAction moveAction;
         [SerializeField] private SpinAction spinAction;
+        [SerializeField] private ShootAction shootAction;
         [SerializeField] private int maxActionPoints = 2;
         [SerializeField] private int actionPoints;
         [SerializeField] private bool isEnemy;
@@ -30,6 +31,7 @@ namespace UnitClass
             spinAction = GetComponent<SpinAction>();
             baseActionsArray = GetComponents<BaseAction>();
             healthSystem = GetComponent<HealthSystem>();
+            shootAction = GetComponent<ShootAction>();
             ResetActionPoint();
             
         }
@@ -121,10 +123,20 @@ namespace UnitClass
         {
             return spinAction;
         }
+        
+        public ShootAction GetShootAction()
+        {
+            return shootAction;
+        }
 
         public BaseAction[] GetBaseActionArray()
         {
             return baseActionsArray;
+        }
+
+        public float GetHealthNormalized()
+        {
+            return healthSystem.GetHealthNormalized();
         }
 
         public bool IsEnemy()
