@@ -10,29 +10,30 @@ namespace Grid
     {
         [SerializeField] private Transform debugObjectPrefab;
         
-        private GridSystem gridSystem;
+        private GridSystem<GridObject> gridSystem;
         public event EventHandler OnAnyUnitMoveGridPosition;
 
         private void Awake()
         {
-            gridSystem = new GridSystem(10, 10, 2f);
+            gridSystem = new GridSystem<GridObject>(10, 10, 2f, 
+                (g, gridPosition) => new GridObject(g,gridPosition));
             gridSystem.CreateDebugObject(debugObjectPrefab, transform);
         }
 
         public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
         {
-            var gridObject = gridSystem.GetGridObject(gridPosition);
+            var gridObject = gridSystem.GetTGridObject(gridPosition);
             gridObject.AddUnit(unit);
         }
 
         public List<Unit> GetUnitListAtGridPosition(GridPosition gridPosition)
         {
-           return gridSystem.GetGridObject(gridPosition).GetUnitList();
+           return gridSystem.GetTGridObject(gridPosition).GetUnitList();
         }
 
         public void RemoveUnitAtGridPosition(GridPosition gridPosition, Unit unit)
         {
-            var gridObject = gridSystem.GetGridObject(gridPosition);
+            var gridObject = gridSystem.GetTGridObject(gridPosition);
             gridObject.RemoveUnit(unit);
         }
         
@@ -79,12 +80,12 @@ namespace Grid
 
         public bool hasAnyUnitOnGridPosition(GridPosition gridPosition)
         {
-            return gridSystem.GetGridObject(gridPosition).HasAnyUnit();
+            return gridSystem.GetTGridObject(gridPosition).HasAnyUnit();
         }
         
         public Unit GetUnitAtGridPosition(GridPosition gridPosition)
         {
-            return gridSystem.GetGridObject(gridPosition).GetUnit();
+            return gridSystem.GetTGridObject(gridPosition).GetUnit();
         }
     }
 }

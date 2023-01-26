@@ -151,11 +151,14 @@ namespace UnitAction
 
         public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
         {
+            var unitAtGridPosition = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
+        
             return new EnemyAIAction
             {
                 gridPosition = gridPosition,
-                actionValue = 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalized() * 100f)),
+                actionValue = 100 + Mathf.RoundToInt((1 - unitAtGridPosition.GetHealthNormalized()) * 100f),
             };
+
         }
 
         public int GetTargetCountAtPosition(GridPosition gridPosition)

@@ -1,29 +1,32 @@
-﻿using UnityEngine;
+﻿using System;
+using JetBrains.Annotations;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Grid
 {
-    public class GridSystem
+    public class GridSystem<TGridObject> 
     {
         private int width;
         private int height;
         private float cellSize;
-        private GridObject[,] gridObjectArray;
+        private TGridObject[,] TGridObjectArray;
         private GridDebugObject[,] gridDebugObjectArray;
 
-        public GridSystem(int width, int height, float cellSize)
+        public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
         {
             this.width = width;
             this.height = height;
             this.cellSize = cellSize;
 
-            gridObjectArray = new GridObject[width,height];
+            TGridObjectArray = new TGridObject[width,height];
             
             for (var x = 0; x < width; x++)
             {
                 for (var z = 0; z < height; z++)
                 {
                     var gridPosition = new GridPosition(x, z);
-                    gridObjectArray[x, z] = new GridObject(this, gridPosition);
+                    TGridObjectArray[x, z] = createGridObject(this, gridPosition);
                 }
             }
         }
@@ -44,7 +47,7 @@ namespace Grid
                     var gridDebugObject = debug.GetComponent<GridDebugObject>();
                     
                     gridDebugObjectArray[x, z] = gridDebugObject;
-                    gridDebugObject.SetGridPosition(GetGridObject(gridPosition));
+                    gridDebugObject.SetGridPosition(GetTGridObject(gridPosition) as GridObject);
                     
                     
                 }
@@ -65,9 +68,9 @@ namespace Grid
             );
         }
 
-        public GridObject GetGridObject(GridPosition gridPosition)
+        public TGridObject GetTGridObject(GridPosition gridPosition)
         {
-            return gridObjectArray[gridPosition.x, gridPosition.z];
+            return TGridObjectArray[gridPosition.x, gridPosition.z];
         }
 
         public GridDebugObject GetGridDebugObject(GridPosition gridPosition)

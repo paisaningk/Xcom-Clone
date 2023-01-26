@@ -88,7 +88,7 @@ namespace UnitClass
         private void SelectUnit(Unit unit)
         {
             selectedUnit = unit;
-            SetSelectedAction(unit.GetMoveAction());
+            SetSelectedAction(unit.GetAction<MoveAction>());
             
             OnOnSelectedUnitChanged();
         }

@@ -99,7 +99,7 @@ namespace UnitAction
 
         public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
         {
-            var targetCountAtGridPosition = unit.GetShootAction().GetTargetCountAtPosition(gridPosition);
+            var targetCountAtGridPosition = unit.GetAction<ShootAction>().GetTargetCountAtPosition(gridPosition);
             
             return new EnemyAIAction
             {

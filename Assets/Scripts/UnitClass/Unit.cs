@@ -11,11 +11,8 @@ namespace UnitClass
 {
     public class Unit : MonoBehaviour
     {
-        private BaseAction[] baseActionsArray;
+        [SerializeField] private BaseAction[] baseActionsArray;
         [SerializeField] private HealthSystem healthSystem;
-        [SerializeField] private MoveAction moveAction;
-        [SerializeField] private SpinAction spinAction;
-        [SerializeField] private ShootAction shootAction;
         [SerializeField] private int maxActionPoints = 2;
         [SerializeField] private int actionPoints;
         [SerializeField] private bool isEnemy;
@@ -27,11 +24,8 @@ namespace UnitClass
 
         public void OnValidate()
         {
-            moveAction = GetComponent<MoveAction>();
-            spinAction = GetComponent<SpinAction>();
             baseActionsArray = GetComponents<BaseAction>();
             healthSystem = GetComponent<HealthSystem>();
-            shootAction = GetComponent<ShootAction>();
             ResetActionPoint();
             
         }
@@ -40,11 +34,6 @@ namespace UnitClass
         {
             gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
             LevelGrid.Instance.MoveUnitToGridPosition(this, gridPosition, gridPosition);
-
-            if (moveAction == null)
-            {
-                moveAction = GetComponent<MoveAction>();
-            }
 
             TurnSystem.Instance.OnTurnChanged += OnTurnChanged;
             healthSystem.OnDead += HealthSystem_OnDead;
@@ -94,6 +83,19 @@ namespace UnitClass
             return false;
         }
 
+        public T GetAction<T>() where T : BaseAction
+        {
+            foreach (var baseAction in baseActionsArray)
+            {
+                if (baseAction is T action)
+                {
+                    return action;
+                }
+            }
+
+            return null;
+        }
+
         public void Damage(int damageAmount)
         {
             healthSystem.Damage(damageAmount);
@@ -109,24 +111,9 @@ namespace UnitClass
             actionPoints = maxActionPoints;
         }
 
-        public MoveAction GetMoveAction()
-        {
-            return moveAction;
-        }
-
         public GridPosition GetGridPosition()
         {
             return gridPosition;
-        }
-
-        public SpinAction GetSpinAction()
-        {
-            return spinAction;
-        }
-        
-        public ShootAction GetShootAction()
-        {
-            return shootAction;
         }
 
         public BaseAction[] GetBaseActionArray()
