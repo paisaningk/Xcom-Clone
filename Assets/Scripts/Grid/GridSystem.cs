@@ -47,7 +47,7 @@ namespace Grid
                     var gridDebugObject = debug.GetComponent<GridDebugObject>();
                     
                     gridDebugObjectArray[x, z] = gridDebugObject;
-                    gridDebugObject.SetGridPosition(GetTGridObject(gridPosition) as GridObject);
+                    gridDebugObject.SetGridObject(GetTGridObject(gridPosition));
                     
                     
                 }

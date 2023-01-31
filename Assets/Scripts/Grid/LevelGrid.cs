@@ -17,7 +17,7 @@ namespace Grid
         {
             gridSystem = new GridSystem<GridObject>(10, 10, 2f, 
                 (g, gridPosition) => new GridObject(g,gridPosition));
-            gridSystem.CreateDebugObject(debugObjectPrefab, transform);
+            //gridSystem.CreateDebugObject(debugObjectPrefab, transform);
         }
 
         public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
@@ -51,9 +51,9 @@ namespace Grid
         {
             RemoveUnitAtGridPosition(fromGridPosition, unit);
             GetGridDebugObject(fromGridPosition).SetDebugText();
-            
+
             AddUnitAtGridPosition(toGridPosition,unit);
-            GetGridDebugObject(toGridPosition).SetDebugText();
+            GetGridDebugObject(fromGridPosition).SetDebugText();
             
             OnAnyUnitMoveGridPosition?.Invoke(this, EventArgs.Empty);
         }

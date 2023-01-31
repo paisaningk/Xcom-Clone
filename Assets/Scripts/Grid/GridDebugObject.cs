@@ -6,18 +6,18 @@ namespace Grid
 {
     public class GridDebugObject : MonoBehaviour
     {
-        [SerializeField] private TMP_Text tmpText;
-        private GridObject gridObject;
+        [SerializeField] private TMP_Text gridPositionText;
+        private object gridObject;
 
-        public void SetGridPosition(GridObject grid)
+        public virtual void SetGridObject(object gObject)
         {
-           gridObject = grid;
+           gridObject = gObject;
            SetDebugText();
         }
 
-        public void SetDebugText()
+        public virtual void SetDebugText()
         {
-            tmpText.text = gridObject.ToString();
+            gridPositionText.text = gridObject.ToString();
         }
     }
 }
