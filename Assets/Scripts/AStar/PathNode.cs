@@ -20,6 +20,16 @@ namespace AStar
             return gridPosition.ToString();
         }
 
+        public void SetGCost(int cost)
+        {
+            gCost = cost;
+        }
+        
+        public void SetHCost(int cost)
+        {
+            hCost = cost;
+        }
+
         public int GetGCost()
         {
             return gCost;
@@ -33,6 +43,39 @@ namespace AStar
         public int GetFCost()
         {
             return fCost;
+        }
+        
+        public int CalculateFCost()
+        {
+            return gCost + hCost;
+        }
+
+        public void ResetCameFromPathNode()
+        {
+            cameFromPathNode = null;
+        }
+
+        public void SetCameFromPathNode(PathNode pathNode)
+        {
+            cameFromPathNode = pathNode;
+        }
+
+        public PathNode GetCameFromPathNode()
+        {
+            return cameFromPathNode;
+        }
+
+        public GridPosition GetGridPosition()
+        {
+            return gridPosition;
+        }
+
+        public void SetUpNode()
+        {
+            SetGCost(int.MaxValue);
+            SetHCost(0);
+            CalculateFCost();
+            ResetCameFromPathNode();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Grid
                 {
                     var girdPosition = new GridPosition(x, z);
                     var instantiate = Instantiate(gridSystemVisualSinglePrefab, 
-                        levelGrid.GetWordPosition(girdPosition), quaternion.identity, transform);
+                        levelGrid.GetWorldPosition(girdPosition), quaternion.identity, transform);
                     gridSystemVisualSingleArray[x, z] = instantiate;
                 }
             }

@@ -22,18 +22,18 @@ namespace Grid
 
         public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
         {
-            var gridObject = gridSystem.GetTGridObject(gridPosition);
+            var gridObject = gridSystem.GetGridObject(gridPosition);
             gridObject.AddUnit(unit);
         }
 
         public List<Unit> GetUnitListAtGridPosition(GridPosition gridPosition)
         {
-           return gridSystem.GetTGridObject(gridPosition).GetUnitList();
+           return gridSystem.GetGridObject(gridPosition).GetUnitList();
         }
 
         public void RemoveUnitAtGridPosition(GridPosition gridPosition, Unit unit)
         {
-            var gridObject = gridSystem.GetTGridObject(gridPosition);
+            var gridObject = gridSystem.GetGridObject(gridPosition);
             gridObject.RemoveUnit(unit);
         }
         
@@ -42,7 +42,7 @@ namespace Grid
             return gridSystem.GetGridPosition(worldPosition);
         }
         
-        public Vector3 GetWordPosition(GridPosition gridPosition)
+        public Vector3 GetWorldPosition(GridPosition gridPosition)
         {
             return gridSystem.GetWordPosition(gridPosition);
         }
@@ -80,12 +80,12 @@ namespace Grid
 
         public bool hasAnyUnitOnGridPosition(GridPosition gridPosition)
         {
-            return gridSystem.GetTGridObject(gridPosition).HasAnyUnit();
+            return gridSystem.GetGridObject(gridPosition).HasAnyUnit();
         }
         
         public Unit GetUnitAtGridPosition(GridPosition gridPosition)
         {
-            return gridSystem.GetTGridObject(gridPosition).GetUnit();
+            return gridSystem.GetGridObject(gridPosition).GetUnit();
         }
     }
 }

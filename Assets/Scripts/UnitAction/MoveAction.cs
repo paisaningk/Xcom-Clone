@@ -56,7 +56,7 @@ namespace UnitAction
 
         public override void TakeAction(GridPosition gridPosition, System.Action onMoveComplete)
         {
-            targetPosition = LevelGrid.Instance.GetWordPosition(gridPosition);
+            targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
 
             OnStartMovingInvoke();
             
