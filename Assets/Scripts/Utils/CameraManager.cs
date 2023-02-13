@@ -38,11 +38,11 @@ namespace Utils
                     
                     var cameraCharacterHeight = Vector3.up * 1.7f;
 
-                    var shootDir = (targetUnit.GetWordPosition() - shooterUnit.GetWordPosition()).normalized;
+                    var shootDir = (targetUnit.GetWorldPosition() - shooterUnit.GetWorldPosition()).normalized;
 
                     var shoulderOffset = Quaternion.Euler(0, 90, 0) * shootDir * shoulderOffsetAmount;
 
-                    var shootUnitHeightPos = shooterUnit.GetWordPosition() + cameraCharacterHeight;
+                    var shootUnitHeightPos = shooterUnit.GetWorldPosition() + cameraCharacterHeight;
 
                     var shootUnitShouldOffset = shootUnitHeightPos + shoulderOffset;
                     
@@ -50,7 +50,7 @@ namespace Utils
                     var actionCameraPosition = shootUnitShouldOffset + (shootDir * -1);
 
                     actionCameraGameObject.transform.position = actionCameraPosition;
-                    actionCameraGameObject.transform.LookAt(targetUnit.GetWordPosition() + cameraCharacterHeight);
+                    actionCameraGameObject.transform.LookAt(targetUnit.GetWorldPosition() + cameraCharacterHeight);
                     ShowActionCamera();
                     break;
             }

@@ -490,15 +490,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff23ca117f222f44ea7617f5b6729e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseActionsArray:
+  - {fileID: 7063669648088669588}
+  - {fileID: -285089706086600240}
+  - {fileID: -2894286149240358017}
   healthSystem: {fileID: 1982577430843455120}
-  moveAction: {fileID: 7063669648088669588}
-  spinAction: {fileID: -285089706086600240}
   maxActionPoints: 2
   actionPoints: 2
   isEnemy: 0
-  e:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!65 &3544650369613331500
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -551,10 +550,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27a1b2a746e33a140aba4beed2bf88a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMoveDistance: 7
+  maxShootDistance: 7
   rotateSpeed: 10
   state: 0
   stateTimer: 0
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &-4153479522988135158
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ namespace UnitAction
         [SerializeField] private float rotateSpeed = 10f;
         [SerializeField] private State state;
         [SerializeField] private float stateTimer;
-        
+        [SerializeField] private LayerMask obstacleLayerMask;
         private readonly float shootingStateTimer = 0.1f;
         private readonly float coolOffingStateTimer = 0.5f;
         private readonly float aimingStateTimer = 0.5f;
@@ -33,7 +33,7 @@ namespace UnitAction
             switch (state)
             {
                 case State.Aiming:
-                    var aimDir = (targetUnit.GetWordPosition() - unit.GetWordPosition()).normalized;
+                    var aimDir = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
                     transform.forward = Vector3.Lerp(transform.forward, aimDir, Time.deltaTime * rotateSpeed);
                     break;
                 
@@ -127,6 +127,13 @@ namespace UnitAction
                     //
                     // validActionGridPositionsList.Add(testGridPosition);
                     // continue;
+                    
+                    var testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+                    if (testDistance > maxShootDistance)
+                    {
+                        continue;
+                    }
+
 
                     if (!LevelGrid.Instance.hasAnyUnitOnGridPosition(testGridPosition))
                     {
@@ -142,6 +149,22 @@ namespace UnitAction
                         continue;
                     }
 
+
+                    var unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unit.GetGridPosition());
+
+                    var shootDir = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+                    
+                    const float unitShoulderHeight = 1.7f;
+                    
+                    var origin = unitWorldPosition + Vector3.up * unitShoulderHeight;
+                    var distance = Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition());
+                    
+                    if (Physics.Raycast(origin ,shootDir, distance,obstacleLayerMask))
+                    {
+                        // Block by an obstacle
+                        continue;
+                    }
+                    
                     validActionGridPositionsList.Add(testGridPosition);
                 }
             }

@@ -25,9 +25,9 @@ namespace Grid
             gridSystem = new GridSystem<GridObject>(width, height, cellSize, 
                 (g, gridPosition) => new GridObject(g,gridPosition));
 
-            for (int x = 0; x < width; x++)
+            for (var x = 0; x < width; x++)
             {
-                for (int z = 0; z < height; z++)
+                for (var z = 0; z < height; z++)
                 {
                     var gridPosition = new GridPosition(x, z);
 
@@ -50,7 +50,7 @@ namespace Grid
         {
             gridSystem = new GridSystem<GridObject>(width, height, cellSize, 
                 (g, gridPosition) => new GridObject(g,gridPosition));
-            gridSystem.CreateDebugObject(debugObjectPrefab, transform);
+            //gridSystem.CreateDebugObject(debugObjectPrefab, transform);
         }
 
         private void Start()
@@ -88,11 +88,12 @@ namespace Grid
 
         public void MoveUnitToGridPosition(Unit unit, GridPosition fromGridPosition, GridPosition toGridPosition)
         {
+            // need debug un comment
             RemoveUnitAtGridPosition(fromGridPosition, unit);
-            GetGridDebugObject(fromGridPosition).SetDebugText();
+            //GetGridDebugObject(fromGridPosition).SetDebugText();
 
             AddUnitAtGridPosition(toGridPosition,unit);
-            GetGridDebugObject(fromGridPosition).SetDebugText();
+            //GetGridDebugObject(fromGridPosition).SetDebugText();
             
             OnAnyUnitMoveGridPosition?.Invoke(this, EventArgs.Empty);
         }

@@ -36,7 +36,7 @@ namespace UnitClass
          
          var bulletProjectile = Instantiate(bulletProjectilePrefab, position, quaternion.identity);
 
-         var targetUnitShootPosition = e.targetUnit.GetWordPosition();
+         var targetUnitShootPosition = e.targetUnit.GetWorldPosition();
 
          targetUnitShootPosition.y = position.y;
 

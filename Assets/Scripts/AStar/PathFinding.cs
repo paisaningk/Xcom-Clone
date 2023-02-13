@@ -52,38 +52,36 @@ namespace AStar
             }
         }
 
-        public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
+        public  (List<GridPosition> gridPositionList, int pathLength) FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
         {
-            //open list contain all the node queued for searching
-            //The next finder will be item in Openlist.
-            //For instance, we found the value of b that was the quickest way after using the value of a before,
-            //therefore we use the value of b to find the next route.
+            // open list contain all the node queued for searching
+            // The next finder will be item in Openlist.
+            // For instance, we found the value of b that was the quickest way after using the value of a before,
+            // therefore we use the value of b to find the next route.
             var openList = new List<PathNode>();
-            
-            //closed list contain all the node we have already serched
+            // therefore we use the value of b to find the next route.
             var closedList = new List<PathNode>();
 
             var startNode = gridSystem.GetGridObject(startGridPosition);
             var endNode = gridSystem.GetGridObject(endGridPosition);
-            
             openList.Add(startNode);
             
-            startNode.SetGCost(0);
-            startNode.SetHCost(CalculateDistance(startGridPosition, endGridPosition));
-            startNode.CalculateFCost();
-
             // set up var all 
             for (int x = 0; x < gridSystem.GetWidth(); x++)
             {
                 for (int z = 0; z < gridSystem.GetHeight(); z++)
                 {
-                    var pathNode = gridSystem.GetGridObject(new GridPosition(x, z));
+                    var gridPosition = new GridPosition(x, z);
+                    var pathNode = gridSystem.GetGridObject(gridPosition);
 
                     pathNode.SetUpNode();
-
                 }
             }
-            
+
+            startNode.SetGCost(0);
+            startNode.SetHCost(CalculateDistance(startGridPosition, endGridPosition));
+            startNode.CalculateFCost();
+
             while (openList.Count > 0)
             {
                 var currentNode = GetLowestFCostPathNode(openList);
@@ -91,47 +89,49 @@ namespace AStar
                 if (currentNode == endNode)
                 {
                     // reached final node
-                    return CalculatePath(endNode);
+                    return (CalculatePath(endNode), endNode.GetFCost());
                 }
 
                 openList.Remove(currentNode);
                 closedList.Add(currentNode);
 
-                foreach (var neighbourList in GetNeighbourList(currentNode))
+                foreach (var neighbourNode in GetNeighbourList(currentNode))
                 {
                     // already searched
-                    if (closedList.Contains(neighbourList))
+                    if (closedList.Contains(neighbourNode))
                     {
                         continue;
                     }
 
-                    if (!neighbourList.IsWalkable())
+                    if (!neighbourNode.IsWalkable())
                     {
-                        closedList.Add(neighbourList);
+                        closedList.Add(neighbourNode);
                         continue;
                     }
 
-                    var distance = CalculateDistance(currentNode.GetGridPosition(), neighbourList.GetGridPosition());
+                    var distance = CalculateDistance(currentNode.GetGridPosition(), neighbourNode.GetGridPosition());
                     var tentativeGCost = currentNode.GetGCost() + distance;
 
                     // check is found the best path
-                    if (tentativeGCost < neighbourList.GetGCost())
+                    if (tentativeGCost < neighbourNode.GetGCost())
                     {
-                        neighbourList.SetCameFromPathNode(currentNode);
-                        neighbourList.SetGCost(tentativeGCost);
-                        neighbourList.SetHCost(CalculateDistance(currentNode.GetGridPosition(), endNode.GetGridPosition()));
-                        neighbourList.CalculateFCost();
+                        neighbourNode.SetCameFromPathNode(currentNode);
+                        neighbourNode.SetGCost(tentativeGCost);
+                        neighbourNode.SetHCost(CalculateDistance(neighbourNode.GetGridPosition(), endGridPosition));
+                        neighbourNode.CalculateFCost();
 
-                        if (!openList.Contains(neighbourList))
+                        if (!openList.Contains(neighbourNode))
                         {
-                            openList.Add(neighbourList);
+                            openList.Add(neighbourNode);
                         }
                     }
                 }
             }
-            // no path found 
-            return null;
+
+            // No path found
+            return (null, 0);
         }
+
         
         private int CalculateDistance(GridPosition gridPositionA, GridPosition gridPositionB)
         {
@@ -171,54 +171,50 @@ namespace AStar
 
             var gridPosition = currentNode.GetGridPosition();
 
-            // set is have node
-            if (gridPosition.z + 1 < gridSystem.GetWidth())
-            {
-                var upNode = GetNode(gridPosition.x, gridPosition.z + 1);    
-                neighbourList.Add(upNode);
-            }
-
-            if (gridPosition.z - 1 >= 0)
-            {
-                var downNode = GetNode(gridPosition.x, gridPosition.z - 1);  
-                neighbourList.Add(downNode);
-            }
-
             if (gridPosition.x - 1 >= 0)
             {
-                var leftNode = GetNode(gridPosition.x - 1, gridPosition.z);
-                neighbourList.Add(leftNode);
-                
+                // Left
+                neighbourList.Add(GetNode(gridPosition.x - 1, gridPosition.z + 0));
                 if (gridPosition.z - 1 >= 0)
                 {
-                    var leftDownNode = GetNode(gridPosition.x - 1, gridPosition.z - 1);
-                    neighbourList.Add(leftDownNode);
+                    // Left Down
+                    neighbourList.Add(GetNode(gridPosition.x - 1, gridPosition.z - 1));
                 }
 
-                if (gridPosition.z + 1 < gridSystem.GetWidth())
+                if (gridPosition.z + 1 < gridSystem.GetHeight())
                 {
-                    var leftUpNode = GetNode(gridPosition.x - 1, gridPosition.z + 1);
-                    neighbourList.Add(leftUpNode);
+                    // Left Up
+                    neighbourList.Add(GetNode(gridPosition.x - 1, gridPosition.z + 1));
                 }
             }
 
             if (gridPosition.x + 1 < gridSystem.GetWidth())
             {
-                var rightNode = GetNode(gridPosition.x + 1, gridPosition.z);
-                neighbourList.Add(rightNode);
-                
+                // Right
+                neighbourList.Add(GetNode(gridPosition.x + 1, gridPosition.z + 0));
                 if (gridPosition.z - 1 >= 0)
                 {
-                    var rightDownNode = GetNode(gridPosition.x + 1, gridPosition.z - 1);
-                    neighbourList.Add(rightDownNode);
+                    // Right Down
+                    neighbourList.Add(GetNode(gridPosition.x + 1, gridPosition.z - 1));
                 }
-
-                if (gridPosition.z + 1 < gridSystem.GetWidth())
+                if (gridPosition.z + 1 < gridSystem.GetHeight())
                 {
-                    var rightUpNode = GetNode(gridPosition.x + 1, gridPosition.z + 1);
-                    neighbourList.Add(rightUpNode);
+                    // Right Up
+                    neighbourList.Add(GetNode(gridPosition.x + 1, gridPosition.z + 1));
                 }
             }
+
+            if (gridPosition.z - 1 >= 0)
+            {
+                // Down
+                neighbourList.Add(GetNode(gridPosition.x + 0, gridPosition.z - 1));
+            }
+            if (gridPosition.z + 1 < gridSystem.GetHeight())
+            {
+                // Up
+                neighbourList.Add(GetNode(gridPosition.x + 0, gridPosition.z + 1));
+            }
+
 
             return neighbourList;
         }
@@ -237,6 +233,22 @@ namespace AStar
             pathNodeList.Reverse();
 
             return pathNodeList.Select(pathNode => pathNode.GetGridPosition()).ToList();
+        }
+
+        public bool IsWalkableGridPosition(GridPosition gridPosition)
+        {
+            return gridSystem.GetGridObject(gridPosition).IsWalkable();
+        }
+
+        public bool HasPath(GridPosition startGridPosition, GridPosition endGridPosition)
+        {
+            var gridPositionList = FindPath(startGridPosition, endGridPosition).gridPositionList;
+            return gridPositionList != null;
+        }
+
+        public int GetPathLength(GridPosition startGridPosition, GridPosition endGridPosition)
+        {
+           return FindPath(startGridPosition, endGridPosition).pathLength;
         }
     }
 }

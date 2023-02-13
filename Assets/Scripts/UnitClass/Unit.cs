@@ -101,7 +101,7 @@ namespace UnitClass
             healthSystem.Damage(damageAmount);
         }
 
-        public Vector3 GetWordPosition()
+        public Vector3 GetWorldPosition()
         {
             return transform.position;
         }

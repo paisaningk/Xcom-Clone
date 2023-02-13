@@ -31,7 +31,7 @@ namespace UnitClass
             unitList.Add(unit);
                         
             #if UNITY_EDITOR
-            Debug.Log(unit + "have spawned");
+            // Debug.Log(unit + "have spawned");
             #endif
             
             if (unit.IsEnemy())

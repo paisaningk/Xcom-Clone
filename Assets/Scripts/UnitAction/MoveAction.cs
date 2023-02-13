@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AStar;
 using Enemy;
 using Grid;
 using UnityEngine;
@@ -18,18 +19,17 @@ namespace UnitAction
         public event EventHandler OnStopMoving;
         
         private const float StopDistance = 0.1f;
-        private Vector3 targetPosition;
+        
+        private List<Vector3> positionList;
+        private int currentPositionIndex;
+        
         private GridPosition gridPosition;
 
-        private void Awake()
-        {
-            targetPosition = transform.position;
-        }
-        
         private void Update()
         {
             if (!isActive) return;
 
+            var targetPosition = positionList[currentPositionIndex];
 
             if (Vector3.Distance(transform.position, targetPosition) > StopDistance)
             {
@@ -37,8 +37,12 @@ namespace UnitAction
             }
             else
             {
+                currentPositionIndex++;
+
+                if (currentPositionIndex < positionList.Count) return;
                 ActionComplete();
                 OnStopMovingInvoke();
+
             }
         }
 
@@ -46,6 +50,7 @@ namespace UnitAction
         {
             var unitTransform = transform;
             var position = unitTransform.position;
+            var targetPosition = positionList[currentPositionIndex];
             
             var moveDirection = (targetPosition - position).normalized;
             position += moveDirection * (moveSpeed * Time.deltaTime);
@@ -54,9 +59,16 @@ namespace UnitAction
             unitTransform.forward = Vector3.Lerp(unitTransform.forward, moveDirection, Time.deltaTime * rotateSpeed);
         }
 
-        public override void TakeAction(GridPosition gridPosition, System.Action onMoveComplete)
+        public override void TakeAction(GridPosition gridPosition, Action onMoveComplete)
         {
-            targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+            positionList = new List<Vector3>();
+            
+            foreach (var position in PathFinding.Instance.FindPath(unit.GetGridPosition(), gridPosition).gridPositionList)
+            {
+                positionList.Add(LevelGrid.Instance.GetWorldPosition(position));
+            }
+            
+            currentPositionIndex = 0;
 
             OnStartMovingInvoke();
             
@@ -89,6 +101,26 @@ namespace UnitAction
                     {
                         continue;
                     }
+
+                    if (!PathFinding.Instance.IsWalkableGridPosition(testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    if (!PathFinding.Instance.HasPath(unitOnGridPosition, testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    const int pathfindingDistanceMultiplier = 10;
+                    var maxDistance = maxMoveDistance * pathfindingDistanceMultiplier;
+                    var pathLength = PathFinding.Instance.GetPathLength(unitOnGridPosition, testGridPosition);
+                    if (pathLength > maxDistance)
+                    {
+                        // Path length is too long
+                        continue;
+                    }
+
                     
                     validActionGridPositionsList.Add(testGridPosition);
                 }

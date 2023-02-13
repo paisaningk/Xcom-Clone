@@ -46,9 +46,9 @@ namespace AStar
             return fCost;
         }
         
-        public int CalculateFCost()
+        public void CalculateFCost()
         {
-            return gCost + hCost;
+            fCost = gCost + hCost;
         }
 
         public void ResetCameFromPathNode()
@@ -83,10 +83,10 @@ namespace AStar
 
         public void SetUpNode()
         {
-            SetGCost(int.MaxValue);
-            SetHCost(0);
-            CalculateFCost();
-            ResetCameFromPathNode();
+           SetGCost(int.MaxValue);
+           SetHCost(0);
+           CalculateFCost();
+           ResetCameFromPathNode();
         }
     }
 }

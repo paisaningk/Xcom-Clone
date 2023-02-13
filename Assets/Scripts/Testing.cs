@@ -18,7 +18,7 @@ public class Testing : MonoBehaviour
            var mouseGridPosition = levelGrid.GetGridPosition(MousePosition.Instance.GetPointPosition());
            var startGridPosition = new GridPosition(0, 0);
 
-           var gridPositionList = PathFinding.Instance.FindPath(startGridPosition, mouseGridPosition);
+           var gridPositionList = PathFinding.Instance.FindPath(startGridPosition, mouseGridPosition).gridPositionList;
 
            for (var i = 0; i < gridPositionList.Count; i++)
            {
