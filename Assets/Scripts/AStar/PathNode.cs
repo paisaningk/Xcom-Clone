@@ -9,6 +9,7 @@ namespace AStar
         private int hCost = 0;
         private int fCost = 0;
         private PathNode cameFromPathNode;
+        private bool isWalkable = true;
 
         public PathNode(GridPosition gridPosition)
         {
@@ -68,6 +69,16 @@ namespace AStar
         public GridPosition GetGridPosition()
         {
             return gridPosition;
+        }
+
+        public bool IsWalkable()
+        {
+            return isWalkable;
+        }
+
+        public void SetIsWalkable(bool isWalkable)
+        {
+            this.isWalkable = isWalkable;
         }
 
         public void SetUpNode()

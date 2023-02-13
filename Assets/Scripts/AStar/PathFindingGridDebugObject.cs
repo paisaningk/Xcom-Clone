@@ -10,6 +10,7 @@ namespace AStar
         [SerializeField] private TMP_Text gCostText;
         [SerializeField] private TMP_Text hCostText;
         [SerializeField] private TMP_Text fCostText;
+        [SerializeField] private SpriteRenderer isWalkableSpriteRenderer;
 
         private PathNode pathNode;
 
@@ -25,6 +26,7 @@ namespace AStar
             gCostText.SetText($"G:{pathNode.GetGCost()}");
             hCostText.SetText($"H:{pathNode.GetHCost()}");
             fCostText.SetText($"F:{pathNode.GetFCost()}");
+            isWalkableSpriteRenderer.color = pathNode.IsWalkable() ? Color.grey : Color.red;
         }
     }
 }

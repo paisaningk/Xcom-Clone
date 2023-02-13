@@ -10,6 +10,7 @@ namespace AStar
     public class PathFinding : Singleton<PathFinding>
     {
         [SerializeField] private Transform debugObjectPrefab;
+        [SerializeField] private LayerMask obstaclesLayerMask;
         private int width;
         private int height;
         private float cellSize;
@@ -18,11 +19,37 @@ namespace AStar
         private const int MoveStraightCost = 10;
         private const int MoveDiagonalCost = 14;
 
-        private void Awake()
+        public void Setup(int width, int height, float cellSize)
         {
-            gridSystem = new GridSystem<PathNode>(10, 10, 2f, 
+            this.width = width;
+            this.height = height;
+            this.cellSize = cellSize;
+            
+            gridSystem = new GridSystem<PathNode>(this.width, this.height, this.cellSize, 
                 (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
-            gridSystem.CreateDebugObject(debugObjectPrefab, transform);
+
+            SetIsWalkable();
+            
+            //gridSystem.CreateDebugObject(debugObjectPrefab, transform);
+        }
+
+        private void SetIsWalkable()
+        {
+            for (int x = 0; x < this.width; x++)
+            {
+                for (int z = 0; z < this.height; z++)
+                {
+                    var gridPosition = new GridPosition(x, z);
+                    var rayCastOffSetDistance = 5;
+                    // + v3.down Because the raycast must not be positioned in the box collider.
+                    var worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition) +
+                                        Vector3.down * rayCastOffSetDistance;
+                    if (Physics.Raycast(worldPosition, Vector3.up, rayCastOffSetDistance * 2, obstaclesLayerMask))
+                    {
+                        GetNode(gridPosition.x, gridPosition.z).SetIsWalkable(false);
+                    }
+                }
+            }
         }
 
         public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
@@ -75,6 +102,12 @@ namespace AStar
                     // already searched
                     if (closedList.Contains(neighbourList))
                     {
+                        continue;
+                    }
+
+                    if (!neighbourList.IsWalkable())
+                    {
+                        closedList.Add(neighbourList);
                         continue;
                     }
 

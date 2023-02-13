@@ -9,13 +9,8 @@ using Utils;
 
 public class Testing : MonoBehaviour
 {
-   
-   private void Start()
-   {
-       Debug.Log(int.MaxValue);
-   }
 
-   private void Update()
+    private void Update()
    {
        if (Input.GetKeyDown(KeyCode.T))
        {
