@@ -151,7 +151,7 @@ namespace UnitClass
         private void HealthSystem_OnDead(object sender, EventArgs e)
         {
             LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this);
-            LevelGrid.Instance.GetGridDebugObject(gridPosition).SetDebugText();
+            //LevelGrid.Instance.GetGridDebugObject(gridPosition).SetDebugText();
             
             Destroy(gameObject);
             

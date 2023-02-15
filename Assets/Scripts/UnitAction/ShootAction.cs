@@ -4,12 +4,14 @@ using Enemy;
 using Grid;
 using UnitClass;
 using UnityEngine;
+using Utils;
 
 namespace UnitAction
 {
     public class ShootAction : BaseAction
     {
-        [Header("Variable")]
+        [Header("Variable")] 
+        [SerializeField] private int damage = 30;
         [SerializeField] private int maxShootDistance = 7;
         [SerializeField] private float rotateSpeed = 10f;
         [SerializeField] private State state;
@@ -22,7 +24,8 @@ namespace UnitAction
         private Unit targetUnit;
         private bool canShootBullet;
 
-        public  event EventHandler<OnShootEventArgs> OnShoot;
+        public event EventHandler<OnShootEventArgs> OnShoot;
+        public static event EventHandler<OnShootEventArgs> OnAnyShoot;
 
         public void Update()
         {
@@ -70,7 +73,10 @@ namespace UnitAction
 
         private void Shoot()
         {
-            targetUnit.Damage(40);
+            OnAnyShoot?.Invoke(null, new OnShootEventArgs(targetUnit, unit));
+            
+            targetUnit.Damage(damage);
+
             OnStartShootInvoke();
         }
 
