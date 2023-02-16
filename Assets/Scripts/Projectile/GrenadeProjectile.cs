@@ -1,4 +1,5 @@
 ﻿using System;
+using Destructible;
 using Grid;
 using UnitClass;
 using Unity.Mathematics;
@@ -21,7 +22,7 @@ namespace Projectile
         private readonly float reachedTargetDistance = 0.2f;
         private float totalDistance;
         private Vector3 positionXZ;
-
+        
         private void Update()
         {
             var moveDir = (targetGridPosition - positionXZ).normalized;
@@ -48,6 +49,10 @@ namespace Projectile
                 if (variable.TryGetComponent(out Unit targetUnit))
                 {
                     targetUnit.Damage(grenadeDamage);
+                }
+                else if(variable.TryGetComponent(out DestructibleCrate destructibleCrate))
+                {
+                    destructibleCrate.Damage();
                 }
             }
 
