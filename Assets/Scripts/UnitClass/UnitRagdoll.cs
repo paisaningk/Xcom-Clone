@@ -9,8 +9,10 @@ namespace UnitClass
       public void Setup(Transform originalRootBone)
       {
          MatchAllChildTransform(originalRootBone, ragDollRootBone);
+
+         var randomDir = new Vector3(Random.Range(-1f, 1f), 0 ,Random.Range(-1f, 1f));
          
-         ApplyExplosionToRagDoll(ragDollRootBone, 500f, transform.position, 10f);
+         ApplyExplosionToRagDoll(ragDollRootBone, 500f, transform.position + randomDir, 10f);
       }
 
       private void MatchAllChildTransform(Transform root, Transform clone)

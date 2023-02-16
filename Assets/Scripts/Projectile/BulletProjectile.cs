@@ -1,15 +1,13 @@
-﻿using System;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 using UnityEngine;
 
-namespace Utils
+namespace Projectile
 {
     public class BulletProjectile : MonoBehaviour
     {
         [SerializeField] private Transform bulletHitVFXPrefab;
         [SerializeField] private TrailRenderer trailRenderer;
         [SerializeField] private float moveSpeed = 200f;
-        [SerializeField]
         private Vector3 targetPosition;
         public void Setup(Vector3 targetPosition)
         {

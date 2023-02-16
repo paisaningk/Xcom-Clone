@@ -1500,6 +1500,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7800282256151414622, guid: 15e584a29edd04d4e84061926ea86429,
+        type: 3}
+      propertyPath: actionPoints
+      value: 999
+      objectReference: {fileID: 0}
+    - target: {fileID: 7800282256151414622, guid: 15e584a29edd04d4e84061926ea86429,
+        type: 3}
+      propertyPath: maxActionPoints
+      value: 999
+      objectReference: {fileID: 0}
     - target: {fileID: 7800282256151414623, guid: 15e584a29edd04d4e84061926ea86429,
         type: 3}
       propertyPath: m_RootOrder
