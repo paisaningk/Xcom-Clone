@@ -94,12 +94,48 @@ namespace Grid
                         ShowGridPositionRange(selectedUnit.GetGridPosition(), shootAction.GetMaxShootDistance(), 
                             GridVisualType.RedSoft);
                         break;
+                    case GrenadeAction grenadeAction:
+                        gridVisualType = GridVisualType.Yellow;
+                        break;
+                    case SwordAction swordAction:
+                        gridVisualType = GridVisualType.Red;
+                        ShowGridPositionRangeSquare(selectedUnit.GetGridPosition(), swordAction.GetMaxSwordDistance(), GridVisualType.RedSoft);
+                        break;
+                        
                 }
                 
                 ShowGridPositionList(selectedAction.GetValidActionGridPositionsList(), gridVisualType);
             }
         }
 
+        /// <summary>
+        /// Show Grid Visual for tell range of action
+        /// </summary>
+        private void ShowGridPositionRangeSquare(GridPosition gridPosition, int range, GridVisualType gridVisualType)
+        {
+            List<GridPosition> gridPositionList = new List<GridPosition>();
+
+            for (var x = -range; x <= range; x++)
+            {
+                for (var z = -range; z <= range; z++)
+                {
+                    var testGridPosition = gridPosition + new GridPosition(x, z);
+                    
+                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    gridPositionList.Add(testGridPosition);
+                }
+            }
+            
+            ShowGridPositionList(gridPositionList, gridVisualType);
+        }
+        
+        /// <summary>
+        /// Show Grid Visual for tell range of action
+        /// </summary>
         private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
         {
             List<GridPosition> gridPositionList = new List<GridPosition>();
