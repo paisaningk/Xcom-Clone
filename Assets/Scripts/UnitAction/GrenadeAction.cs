@@ -12,13 +12,8 @@ namespace UnitAction
     {
         [SerializeField] private GrenadeProjectile grenadeProjectile;
         [SerializeField] private int maxThrowDistance = 7;
-        
-        public void Update()
-        {
-            if (!isActive) return;
-            
-            
-        }
+
+        public static event EventHandler OnAnyGrenadeExploded;
 
         public override string GetActionName()
         {
@@ -51,6 +46,7 @@ namespace UnitAction
                         continue;
                     }
 
+                    //ทำเป็นฟิลแบบม้าของ fm
                     var testDistance = Mathf.Abs(x) + Mathf.Abs(z);
                     if (testDistance > maxThrowDistance)
                     {

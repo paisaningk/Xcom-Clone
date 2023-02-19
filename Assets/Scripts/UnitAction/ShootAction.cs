@@ -14,7 +14,7 @@ namespace UnitAction
         [SerializeField] private int damage = 30;
         [SerializeField] private int maxShootDistance = 7;
         [SerializeField] private float rotateSpeed = 10f;
-        [SerializeField] private State state;
+        [SerializeField] private ShootState shootState;
         [SerializeField] private float stateTimer;
         [SerializeField] private LayerMask obstacleLayerMask;
         private readonly float shootingStateTimer = 0.1f;
@@ -33,21 +33,21 @@ namespace UnitAction
 
             stateTimer -= Time.deltaTime;
 
-            switch (state)
+            switch (shootState)
             {
-                case State.Aiming:
+                case ShootState.Aiming:
                     var aimDir = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
                     transform.forward = Vector3.Lerp(transform.forward, aimDir, Time.deltaTime * rotateSpeed);
                     break;
                 
-                case State.Shooting:
+                case ShootState.Shooting:
                     if (canShootBullet)
                     {
                         Shoot();
                         canShootBullet = false;
                     }
                     break;
-                case State.CoolOff:
+                case ShootState.CoolOff:
                     break;
             }
 
@@ -60,7 +60,7 @@ namespace UnitAction
         public override void TakeAction(GridPosition gridPosition, System.Action onActionComplete)
         {
 
-            state = State.Aiming;
+            shootState = ShootState.Aiming;
             
             stateTimer = aimingStateTimer;
 
@@ -82,19 +82,19 @@ namespace UnitAction
 
         private void NextState()
         {
-            switch (state)
+            switch (shootState)
             {
-                case State.Aiming:
-                    state = State.Shooting;
+                case ShootState.Aiming:
+                    shootState = ShootState.Shooting;
                     stateTimer = shootingStateTimer;
                     break;
                 
-                case State.Shooting:
-                    state = State.CoolOff;
+                case ShootState.Shooting:
+                    shootState = ShootState.CoolOff;
                     stateTimer = coolOffingStateTimer;
                     break;
                 
-                case State.CoolOff:
+                case ShootState.CoolOff:
                     ActionComplete();
                     break;
             }
@@ -121,26 +121,7 @@ namespace UnitAction
                     {
                         continue;
                     }
-
-                    // เดี่ยวมาทำต่อเอง
-                    // อันนี้คือคือแบบ เดินของม้าแบบ fm
-                    // int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
-                    //
-                    // if (testDistance > maxMoveDistance)
-                    // {
-                    //     continue;
-                    // }
-                    //
-                    // validActionGridPositionsList.Add(testGridPosition);
-                    // continue;
                     
-                    var testDistance = Mathf.Abs(x) + Mathf.Abs(z);
-                    if (testDistance > maxShootDistance)
-                    {
-                        continue;
-                    }
-
-
                     if (!LevelGrid.Instance.hasAnyUnitOnGridPosition(testGridPosition))
                     {
                         // Grid Position is empty , no unit
@@ -155,6 +136,11 @@ namespace UnitAction
                         continue;
                     }
 
+                    var testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+                    if (testDistance > maxShootDistance)
+                    {
+                        continue;
+                    }
 
                     var unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unit.GetGridPosition());
 
@@ -216,7 +202,7 @@ namespace UnitAction
         }
     }
 
-    internal enum State
+    internal enum ShootState
     {
         Aiming,
         Shooting,
