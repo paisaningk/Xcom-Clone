@@ -595,6 +595,7 @@ GameObject:
   - component: {fileID: 404269524076472264}
   - component: {fileID: 8578879287153338829}
   - component: {fileID: 1477896005273236432}
+  - component: {fileID: 3312557428262512338}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -779,6 +780,18 @@ MonoBehaviour:
   damage: 100
   swordState: 0
   stateTimer: 0
+--- !u!114 &3312557428262512338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7800282256151414621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45eeb502f3c64ef8b3920f379ec33165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8784731832185917822
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,28 +2,34 @@
 using System.Collections.Generic;
 using Enemy;
 using Grid;
-using Projectile;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace UnitAction
 {
-    public class GrenadeAction : BaseAction
+    public class InteractAction : BaseAction
     {
-        [SerializeField] private GrenadeProjectile grenadeProjectile;
-        [SerializeField] private int maxThrowDistance = 7;
-
+        [SerializeField] private int maxInteractDistance = 1;
         public override string GetActionName()
         {
-            return "Grenade";
+            return "Interact";
         }
 
-        public override void TakeAction(GridPosition gridPosition, Action onAZctionComplete)
+        private void Update()
         {
-            var projectile = Instantiate(grenadeProjectile, unit.GetWorldPosition(), quaternion.identity);
-            projectile.SetUp(gridPosition, OnGrenadeBehActionComplete);
-            Debug.Log("Grenade Action");
+            if (!isActive)
+            {
+                return;
+            }
+            
+            ActionComplete();
+        }
 
+        public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
+        {
+            var doorAtGrid = LevelGrid.Instance.GetDoorAtGridPosition(gridPosition);
+            doorAtGrid.Interact(OnInteractComplete);
+            Debug.Log("Interact", this);
+            
             ActionStart(onActionComplete);
         }
 
@@ -32,21 +38,21 @@ namespace UnitAction
             var validActionGridPositionsList = new List<GridPosition>();
             var unitOnGridPosition = unit.GetGridPosition();
 
-            for (var x = -maxThrowDistance; x <= maxThrowDistance; x++)
+            for (var x = -maxInteractDistance; x <= maxInteractDistance; x++)
             {
-                for (var z = -maxThrowDistance; z <= maxThrowDistance; z++)
+                for (var z = -maxInteractDistance; z <= maxInteractDistance; z++)
                 {
                     var offSetGridPosition = new GridPosition(x, z);
                     var testGridPosition = offSetGridPosition + unitOnGridPosition;
-
+                    
                     if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
                     {
                         continue;
                     }
 
-                    //ทำเป็นฟิลแบบม้าของ fm
-                    var testDistance = Mathf.Abs(x) + Mathf.Abs(z);
-                    if (testDistance > maxThrowDistance)
+                    var doorAtGrid = LevelGrid.Instance.GetDoorAtGridPosition(testGridPosition);
+
+                    if (doorAtGrid == null)
                     {
                         continue;
                     }
@@ -54,7 +60,7 @@ namespace UnitAction
                     validActionGridPositionsList.Add(testGridPosition);
                 }
             }
-
+            
             return validActionGridPositionsList;
         }
 
@@ -66,8 +72,13 @@ namespace UnitAction
                 actionValue = 0,
             };
         }
+        
+        public override int GetActionPointsCost()
+        {
+            return 0;
+        }
 
-        private void OnGrenadeBehActionComplete()
+        private void OnInteractComplete()
         {
             ActionComplete();
         }

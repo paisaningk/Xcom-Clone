@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AStar;
+using ObjectInGame.Door;
 using UnitClass;
 using UnityEngine;
 using Utils;
@@ -126,6 +127,17 @@ namespace Grid
         public Unit GetUnitAtGridPosition(GridPosition gridPosition)
         {
             return gridSystem.GetGridObject(gridPosition).GetUnit();
+        }
+
+        public Door GetDoorAtGridPosition(GridPosition gridPosition)
+        {
+            var gridObject = gridSystem.GetGridObject(gridPosition);
+            return gridObject.GetDoor();
+        }
+        
+        public void SetDoorAtGridPosition(GridPosition gridPosition, Door door)
+        {
+            gridSystem.GetGridObject(gridPosition).SetDoor(door);
         }
     }
 }

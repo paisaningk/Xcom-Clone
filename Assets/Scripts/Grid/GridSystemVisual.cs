@@ -82,7 +82,6 @@ namespace Grid
 
                 switch (selectedAction)
                 {
-                    default:
                     case MoveAction moveAction:
                         gridVisualType = GridVisualType.White;
                         break;
@@ -100,6 +99,10 @@ namespace Grid
                     case SwordAction swordAction:
                         gridVisualType = GridVisualType.Red;
                         ShowGridPositionRangeSquare(selectedUnit.GetGridPosition(), swordAction.GetMaxSwordDistance(), GridVisualType.RedSoft);
+                        break;
+                    case InteractAction interactAction:
+                        gridVisualType = GridVisualType.Blue;
+                        
                         break;
                         
                 }
