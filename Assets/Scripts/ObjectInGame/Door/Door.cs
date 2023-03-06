@@ -2,11 +2,12 @@
 using System.Collections;
 using AStar;
 using Grid;
+using InterfaceClass;
 using UnityEngine;
 
 namespace ObjectInGame.Door
 {
-    public class Door : MonoBehaviour
+    public class Door : MonoBehaviour, IInteractable
     {
         [SerializeField] private bool isOpen;
         [SerializeField] private Animator animator;
@@ -18,7 +19,7 @@ namespace ObjectInGame.Door
         public void Start()
         {
             gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-            LevelGrid.Instance.SetDoorAtGridPosition(gridPosition, this);
+            LevelGrid.Instance.SetInteractableAtGridPosition(gridPosition, this);
 
             if (isOpen)
             {
@@ -30,9 +31,9 @@ namespace ObjectInGame.Door
             }
         }
 
-        public void Interact(Action onInteractComplete)
+        public void Interact(Action onInteractionComplete)
         {
-            this.onInteractComplete = onInteractComplete;
+            this.onInteractComplete = onInteractionComplete;
             timer = 0.5f;
             if (isOpen)
             {

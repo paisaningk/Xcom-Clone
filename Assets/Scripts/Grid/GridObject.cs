@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using InterfaceClass;
 using ObjectInGame.Door;
 using UnitClass;
 
@@ -9,7 +10,7 @@ namespace Grid
         private GridSystem<GridObject> gridSystem;
         private GridPosition gridPosition;
         private List<Unit> unitList;
-        private Door door;
+        private IInteractable interactable;
         
         public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
         {
@@ -58,14 +59,14 @@ namespace Grid
             return gridPosition + "\n" + unitString;
         }
 
-        public Door GetDoor()
+        public IInteractable GetDoor()
         {
-            return door;
+            return interactable;
         }
 
-        public void SetDoor(Door door)
+        public void SetInteractable(IInteractable interactable)
         {
-            this.door = door;
+            this.interactable = interactable;
         }
     }
 }

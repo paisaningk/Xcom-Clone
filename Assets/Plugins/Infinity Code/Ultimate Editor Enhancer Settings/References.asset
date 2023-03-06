@@ -19,13 +19,13 @@ MonoBehaviour:
     condition: 0
     value: --
     trimChars: -=
-    backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    backgroundColor: {r: 0.5573514, g: 0.7169812, b: 0.7169812, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
     textAlign: 1
     textStyle: 1
   _quickAccessItems:
   - tooltip: Open Scene
-    expanded: 0
+    expanded: 1
     settings:
     - InfinityCode.UltimateEditorEnhancer.SceneTools.QuickAccessActions.OpenAction
     intSettings: 
@@ -184,4 +184,6 @@ MonoBehaviour:
     customWindowSize: {x: 400, y: 300}
     alignWindowToBar: 1
     windowMode: 0
-  _sceneHistory: []
+  _sceneHistory:
+  - name: GameScene
+    path: Assets/Scenes/GameScene.unity

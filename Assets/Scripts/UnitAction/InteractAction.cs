@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Enemy;
 using Grid;
+using InterfaceClass;
 using UnityEngine;
 
 namespace UnitAction
@@ -26,8 +27,8 @@ namespace UnitAction
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
         {
-            var doorAtGrid = LevelGrid.Instance.GetDoorAtGridPosition(gridPosition);
-            doorAtGrid.Interact(OnInteractComplete);
+            var interactable = LevelGrid.Instance.GetInteractableAtGridPosition(gridPosition);
+            interactable.Interact(OnInteractComplete);
             Debug.Log("Interact", this);
             
             ActionStart(onActionComplete);
@@ -50,9 +51,9 @@ namespace UnitAction
                         continue;
                     }
 
-                    var doorAtGrid = LevelGrid.Instance.GetDoorAtGridPosition(testGridPosition);
+                    var interactable = LevelGrid.Instance.GetInteractableAtGridPosition(testGridPosition);
 
-                    if (doorAtGrid == null)
+                    if (interactable == null)
                     {
                         continue;
                     }
