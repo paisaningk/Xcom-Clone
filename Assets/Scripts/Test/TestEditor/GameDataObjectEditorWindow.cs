@@ -17,17 +17,22 @@ namespace Test.TestEditor
         {
             currentProperty = serializedObject.FindProperty("myTest");
             
-            Draw(currentProperty);
+            DrawModifyList(currentProperty);
 
             EditorGUILayout.BeginHorizontal();
 
-            EditorGUILayout.BeginVertical("box", GUILayout.MaxHeight(150), GUILayout.Width(50));
+            DrawButtonSelectList();
+
+            DrawProperty();
             
-            DrawSideBarButton(currentProperty);
-            
-            EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical("box",  GUILayout.ExpandHeight(this));
+            EditorGUILayout.EndHorizontal();
+
+            Apply();
+        }
+
+        private void DrawProperty()
+        {
+            EditorGUILayout.BeginVertical("box", GUILayout.ExpandHeight(this));
 
             if (selectedProperty != null)
             {
@@ -37,12 +42,17 @@ namespace Test.TestEditor
             {
                 EditorGUILayout.LabelField($"Select an item from the list");
             }
-            
+
             EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
+        }
 
-            Apply();
+        private void DrawButtonSelectList()
+        {
+            EditorGUILayout.BeginVertical("box", GUILayout.MaxHeight(150), GUILayout.Width(50));
 
+            DrawSideBarButton(currentProperty);
+
+            EditorGUILayout.EndVertical();
         }
 
         private void DrawSelectPropertiesPaned()
@@ -51,6 +61,7 @@ namespace Test.TestEditor
 
             EditorGUILayout.BeginHorizontal();
 
+            // button like odin group select
             if (GUILayout.Button("true", EditorStyles.toolbarButton))
             {
                 isTest = true;
@@ -77,11 +88,11 @@ namespace Test.TestEditor
 
         }
 
-        private void Draw(SerializedProperty serializedProperty)
+        private void DrawModifyList(SerializedProperty serializedProperty)
         {
             EditorGUILayout.BeginHorizontal();
 
-            Show(serializedProperty);
+            EditorGUILayout.PropertyField(serializedProperty.FindPropertyRelative("Array.size"));
             
             if (GUILayout.Button("Add New Item")) 
             {
@@ -94,12 +105,6 @@ namespace Test.TestEditor
             }
             
             EditorGUILayout.EndHorizontal();
-        }
-
-
-        private static void Show (SerializedProperty list) 
-        {
-            EditorGUILayout.PropertyField(list.FindPropertyRelative("Array.size"));
         }
     }
 }

@@ -56,6 +56,7 @@ namespace Test.TestEditor
         /// <param name="prop">what prop we need to show</param>
         protected void DrawSideBarButton(SerializedProperty prop)
         {
+            
             foreach (SerializedProperty p in prop)
             {
                 if (GUILayout.Button(p.displayName))
